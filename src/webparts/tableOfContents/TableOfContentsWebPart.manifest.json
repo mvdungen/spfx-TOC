@@ -1,0 +1,26 @@
+{
+	"$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+	"id": "72693be0-08ee-4db5-96d0-74e3b41fab11",
+	"alias": "TableOfContentsWebPart",
+	"componentType": "WebPart",
+
+	"version": "*",
+	"manifestVersion": 2,
+
+	"requiresCustomScript": false,
+	"supportedHosts": ["SharePointWebPart", "TeamsPersonalApp", "TeamsTab", "SharePointFullPage"],
+	"supportsThemeVariants": true,
+
+	"preconfiguredEntries": [
+		{
+			"groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+			"group": { "default": "Advanced" },
+			"title": { "default": "Table of Contents" },
+			"description": {
+				"default": "The table of contents web part allows you to create a table of content on a normal SharePoint page."
+			},
+			"officeFabricIconFontName": "List",
+			"properties": {}
+		}
+	]
+}

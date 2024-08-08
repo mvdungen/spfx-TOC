@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Table of Contents web part",
+    "id": "0028f5c8-8d69-43a9-87d9-78c96dfb5d6c",
+    "version": "0.1.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "Maarten van den Dungen",
+      "websiteUrl": "https://rapidcircle.com",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.18.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Create a table of contents on your page."
+      },
+      "longDescription": {
+        "default": "The table of contents web part allows you to create a table of content on a normal SharePoint page."
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Table of Contents web part",
+        "description": "The table of contents web part allows you to create a table of content on a normal SharePoint page.",
+        "id": "331f897b-90b8-4206-9368-50dbc5da77ae",
+        "version": "0.1.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/table-of-contents.sppkg"
+  }
+}

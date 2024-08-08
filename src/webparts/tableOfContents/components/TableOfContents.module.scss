@@ -1,0 +1,49 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.tableOfContents {
+	margin: -8px;
+	padding: 0px 8px;
+	// border: 1px dashed red;
+
+	.text_color {
+		color: inherit;
+	}
+
+	.section_titledescription {
+		padding: 8px 0px;
+
+		.title {
+			padding-bottom: 8px;
+		}
+		.description {
+			padding-bottom: 0px;
+		}
+	}
+
+	.section_toc {
+		padding: 8px 0px;
+
+		.toc_item {
+			display: block;
+			box-sizing: border-box;
+			padding-bottom: 0px;
+
+			.toc_item_text {
+				display: block;
+				cursor: pointer;
+				padding: 5px 0px;
+				opacity: 0.5;
+			}
+			.toc_item_text:hover {
+				opacity: 1;
+				font-weight: 600;
+			}
+		}
+
+		.active span {
+			opacity: 1 !important;
+			font-weight: 700;
+		}
+	}
+
+}
