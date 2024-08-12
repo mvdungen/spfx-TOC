@@ -8,6 +8,7 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import {
 	IPropertyPaneChoiceGroupOption,
 	type IPropertyPaneConfiguration,
+	PropertyPaneButton,
 	PropertyPaneChoiceGroup,
 	PropertyPaneHorizontalRule,
 	PropertyPaneTextField,
@@ -18,8 +19,11 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
 import TableOfContents from './components/TableOfContents';
 
+import styles from './components/TableOfContents.module.scss';
+
 export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITableOfContentsProps> {
 	private _isDarkTheme: boolean = false;
+	private _isMarked: boolean = false;
 
 	public render(): void {
 		const element: React.ReactElement<ITableOfContentsProps> = React.createElement(
@@ -79,7 +83,7 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 								PropertyPaneToggle('showTitleDescription', {
 									label: 'Show Title and Description',
 									onText: 'Yes',
-									offText: 'No'
+									offText: 'No',
 								}),
 								PropertyPaneTextField('title', {
 									label: 'Title',
@@ -94,17 +98,45 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 								PropertyPaneToggle('showButtonBackToTop', {
 									label: 'Show back to top button',
 									onText: 'Yes',
-									offText: 'No'
+									offText: 'No',
 								}),
 								PropertyPaneToggle('pinWebpartOnScroll', {
 									label: 'Pin web part on scroll',
 									onText: 'Yes',
-									offText: 'No'
+									offText: 'No',
 								}),
 								PropertyPaneHorizontalRule(),
 								PropertyPaneChoiceGroup('canvasId', {
-									label: 'Canvas via choices',
+									label: 'Choose content area(s)',
 									options: this.getCanvasSections(),
+								}),
+								PropertyPaneButton('', {
+									text: this._isMarked
+										? 'Hide selected area(s)'
+										: 'Show selected area(s)',
+									disabled: this.properties.canvasId === undefined,
+									onClick: () => {
+										// get area
+										const _id: number = this.properties.canvasId;
+										const _canvasList: NodeListOf<HTMLElement> =
+											document.querySelectorAll(CANVAS_ID);
+										// get selected and mark this one
+										if (_canvasList && _canvasList.length > 0) {
+											// add class to selected canvas area
+											const _canvasItem: HTMLElement = _canvasList[_id];
+											if (this._isMarked) {
+												// unmark
+												_canvasItem.classList.remove(styles.mark_area);
+												// set flag
+												this._isMarked = false;
+											} else {
+												// unmark
+												_canvasItem.classList.add(styles.mark_area);
+												// set flag
+												this._isMarked = true;
+											}
+										}
+									},
 								}),
 							],
 						},

@@ -1,6 +1,12 @@
 import * as React from 'react';
 
-import { CANVAS_ID, TOC_ID, TOC_OBS_ID } from '../../constants/constants';
+import {
+	CANVAS_ID,
+	PAGE_HEADER,
+	TOC_ID,
+	TOC_OBS_ID,
+	TOC_PLACEHOLDER,
+} from '../../constants/constants';
 import { ITOCHeading } from '../../interfaces/ITOCHeading';
 
 import { Text } from '@fluentui/react';
@@ -30,18 +36,25 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 				// get element which we're observing
 				const _tocObsElm: IntersectionObserverEntry = es[0];
 				const _toc: HTMLElement | null = document.getElementById(TOC_ID);
+				const _tocPlaceholder: HTMLElement | null =
+					document.getElementById(TOC_PLACEHOLDER);
 				// take action based on the intersection (visible or not)
-				if (_toc) {
+				if (_toc && _tocPlaceholder) {
 					if (_tocObsElm.isIntersecting) {
 						// visible
-						_toc.style.position = '';
-						_toc.style.top = '';
-						_toc.style.width = '';
+						_resetTOC(_toc, _tocPlaceholder);
+						// _toc.style.position = '';
+						// _toc.style.top = '';
+						// _toc.style.width = '';
+						// _toc.style.zIndex = '0';
+						// _tocPlaceholder.style.height = `0px`;
 					} else {
 						// invisible
 						_toc.style.position = 'fixed';
-						_toc.style.top = `${_tocObsElm.boundingClientRect.top}px`;
+						_toc.style.top = `${_tocObsElm.boundingClientRect.top + 24}px`;
 						_toc.style.width = `${_tocObsElm.boundingClientRect.width}px`;
+						_toc.style.zIndex = '100';
+						_tocPlaceholder.style.height = `${_toc.clientHeight}px`;
 					}
 				}
 			}
@@ -49,10 +62,22 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 		// get toc element to observe (small div above the actual TOC)
 		const elm = document.getElementById(TOC_OBS_ID);
 		// observe when not in edit mode
-		if (elm && props.pin && props.displayMode === DisplayMode.Read) {
-			obs.observe(elm);
+		if (elm && props.pin) {
+			if (props.displayMode === DisplayMode.Read) {
+				obs.observe(elm);
+			} else {
+				// stop observing
+				obs.unobserve(elm);
+				// reset heights and widths > get toc and toc placeholders
+				const _toc: HTMLElement | null = document.getElementById(TOC_ID);
+				const _tocPlaceholder: HTMLElement | null =
+					document.getElementById(TOC_PLACEHOLDER);
+				if (_toc && _tocPlaceholder) {
+					_resetTOC(_toc, _tocPlaceholder);
+				}
+			}
 		}
-	});
+	}, []);
 
 	React.useEffect(() => {
 		// add observer task to mark active heading in TOC
@@ -74,15 +99,17 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 				}
 			});
 		});
-		// get correct canvas element
-		const _elms = document.querySelectorAll(CANVAS_ID);
-		if (_elms && _elms.length > 0) {
-			// get element containing all content
-			const _elm = _elms[props.canvasId];
-			// start observing
-			_elm.querySelectorAll('h1, h2, h3, h4, h5').forEach(_heading => {
-				observer.observe(_heading);
-			});
+		if (props.canvasId !== undefined) {
+			// get correct canvas element
+			const _elms = document.querySelectorAll(CANVAS_ID);
+			if (_elms && _elms.length > 0) {
+				// get element containing all content
+				const _elm = _elms[props.canvasId];
+				// start observing
+				_elm.querySelectorAll('h1, h2, h3, h4, h5').forEach(_heading => {
+					observer.observe(_heading);
+				});
+			}
 		}
 	}, []);
 
@@ -95,12 +122,15 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 		return <div>{_results.map(_h => _h)}</div>;
 	};
 
-	const TOCItem = (p: { item: ITOCHeading; elementId: string }): JSX.Element => {
+	const TOCItem = (p: { item: ITOCHeading; elementId: string; index: number }): JSX.Element => {
 		return (
 			<div
 				id={`toc_${p.elementId}`} // used as id in useEffect to mark item active
 				className={styles.toc_item}
-				onClick={() => _scrollElementInView(p.elementId)}
+				onClick={() => {
+					// scroll to element
+					_scrollElementInView(p.elementId, p.index);
+				}}
 			>
 				<Text
 					variant='large'
@@ -140,30 +170,45 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 			const _parser: DOMParser = new DOMParser();
 			const _htmlDoc: Document = _parser.parseFromString(_text, 'text/html');
 			// iterate all heading in parser
-			_htmlDoc.querySelectorAll('h1, h2, h3, h4, h5').forEach(_h => {
+			_htmlDoc.querySelectorAll('h1, h2, h3, h4, h5').forEach((_h, _i: number) => {
 				// get title and level from HTML content
 				const _title: string = _h.textContent?.trim() as string;
 				const _level: number = parseInt(_h.tagName.toString().substring(1, 2)) - 2;
 				// add toc item (depending on edit level)
 				_tocItems.push(
-					<TOCItem item={{ title: _title, level: _level }} elementId={_h.id} />
+					<TOCItem item={{ title: _title, level: _level }} elementId={_h.id} index={_i} />
 				);
 			});
 		}
 		return _tocItems;
 	}
 
-	function _scrollElementInView(elementId: string): void {
+	function _scrollElementInView(elementId: string, index: number): void {
 		if (props.displayMode === DisplayMode.Edit) {
 			// if we're in edit mode, do nothing
 		} else {
-			// otherise, get element to scroll to
-			const _elm: HTMLElement | null = document.getElementById(elementId);
+			// else, set default element to scroll to
+			let _elm: HTMLElement | null = document.getElementById(elementId);
+			// check passed index, if index = 0 then we need another ID because, the first
+			// index is not that hihg up in the page that it scrolls to the right position
+			if (index === 0) {
+				_elm = document.querySelector(PAGE_HEADER);
+			}
 			// and scroll element into the current view
 			if (_elm) {
 				_elm.scrollIntoView({ behavior: 'smooth' });
 			}
 		}
+	}
+
+	function _resetTOC(elmTOC: HTMLElement, elmPlaceholder: HTMLElement): void {
+		console.log('resetting toc')
+		elmTOC.style.position = '';
+		elmTOC.style.top = '';
+		elmTOC.style.width = '';
+		elmTOC.style.zIndex = '0';
+		elmPlaceholder.style.height = `0px`;
+
 	}
 
 	// component render -------------------------------------------------------

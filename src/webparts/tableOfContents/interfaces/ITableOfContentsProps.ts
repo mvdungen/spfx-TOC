@@ -1,5 +1,5 @@
-import { BaseComponentContext } from "@microsoft/sp-component-base";
 import { DisplayMode } from "@microsoft/sp-core-library";
+import { WebPartContext } from "@microsoft/sp-webpart-base";
 
 export interface ITableOfContentsProps {
   // web part specific properties
@@ -11,7 +11,7 @@ export interface ITableOfContentsProps {
   showButtonBackToTop: boolean;
   displayMode: DisplayMode;
   // standard SPO SPFx web part properties
-  context: BaseComponentContext;
+  context: WebPartContext;
   isDarkTheme: boolean;
   hasTeamsContext: boolean;
 }

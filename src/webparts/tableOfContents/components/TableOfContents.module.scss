@@ -3,10 +3,21 @@
 .tableOfContents {
 	margin: -8px;
 	padding: 0px 8px;
-	// border: 1px dashed red;
+	background-color: white;
+	border-radius: 5px;
+
+	.init_webpart {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		padding: 20px;
+		align-items: center;
+		justify-content: center;
+		background-color: '[theme: neutralLight, default: #0078d7]';;
+	}
 
 	.text_color {
-		color: inherit;
+		color: '[theme: themePrimary, default: #0078d7]';
 	}
 
 	.section_titledescription {
@@ -33,6 +44,7 @@
 				cursor: pointer;
 				padding: 5px 0px;
 				opacity: 0.5;
+				color: '[theme: themePrimary, default: #0078d7]';
 			}
 			.toc_item_text:hover {
 				opacity: 1;
@@ -45,5 +57,9 @@
 			font-weight: 700;
 		}
 	}
+}
 
+.mark_area {
+	margin: 8px;
+	border: 5px dashed red;
 }
