@@ -35,6 +35,7 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 				description: this.properties.description,
 				canvasId: this.properties.canvasId,
 				pinWebpartOnScroll: this.properties.pinWebpartOnScroll,
+				levels: this.properties.levels,
 				displayMode: this.displayMode,
 				// default SPO SPFx web part properties
 				context: this.context,
@@ -95,6 +96,10 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 									rows: 8,
 									disabled: !this.properties.showTitleDescription,
 								}),
+								PropertyPaneChoiceGroup('levels', {
+									label: 'Levels to show',
+									options: this.getLevels(),
+								}),
 								PropertyPaneToggle('pinWebpartOnScroll', {
 									label: 'Pin web part on scroll',
 									onText: 'Yes',
@@ -102,13 +107,13 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 								}),
 								PropertyPaneHorizontalRule(),
 								PropertyPaneChoiceGroup('canvasId', {
-									label: 'Choose content area(s)',
+									label: 'Choose content area',
 									options: this.getCanvasSections(),
 								}),
 								PropertyPaneButton('', {
 									text: this._isMarked
-										? 'Hide selected area(s)'
-										: 'Show selected area(s)',
+										? 'Hide selected area'
+										: 'Show selected area',
 									disabled: this.properties.canvasId === undefined,
 									onClick: () => {
 										// toggle marked area
@@ -161,6 +166,15 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 			});
 		}
 		return _results;
+	}
+
+	private getLevels(): IPropertyPaneChoiceGroupOption[] {
+		return [
+			{ key: 'h1, h2, h3, h4, h5', text: 'H1, H2, H3, H4, H5' },
+			{ key: 'h1, h2, h3, h4', text: 'H1, H2, H3, H4' },
+			{ key: 'h1, h2, h3', text: 'H1, H2, H3' },
+			{ key: 'h1, h2', text: 'H1, H2' },
+		];
 	}
 
 	private _toggleMarkedArea(canvasId: number, toggle: boolean): void {

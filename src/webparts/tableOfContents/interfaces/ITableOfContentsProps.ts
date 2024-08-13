@@ -8,6 +8,7 @@ export interface ITableOfContentsProps {
   description: string;
   canvasId: number;
   pinWebpartOnScroll: boolean;
+  levels: string;
   displayMode: DisplayMode;
   // standard SPO SPFx web part properties
   context: WebPartContext;

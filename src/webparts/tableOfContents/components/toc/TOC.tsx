@@ -15,6 +15,7 @@ import TOCItem from './TOCItem';
 export interface ITOCProps {
 	context: WebPartContext;
 	canvasId: number;
+	levels: string;
 	pin: boolean;
 	displayMode: DisplayMode;
 }
@@ -123,7 +124,7 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 		// extract all heading from HTML content
 		const _results: JSX.Element[] = [];
 		// and iterate each toc item to create a JSX element from it
-		getTOCItemsFromContent({ canvasId: props.canvasId }).forEach(
+		getTOCItemsFromContent({ canvasId: props.canvasId, levels: props.levels }).forEach(
 			(_tocItem: ITOCItem, _index: number) => {
 				if (_index === 0 && props.pin && props.displayMode === DisplayMode.Read) {
 					// we're pinning the toc and this is the first element > callback to add top element

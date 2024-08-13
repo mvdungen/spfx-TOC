@@ -47,6 +47,7 @@ export default class TableOfContents extends React.Component<ITableOfContentsPro
 						<TOC
 							context={this.props.context}
 							canvasId={this.props.canvasId}
+							levels={this.props.levels}
 							pin={this.props.pinWebpartOnScroll}
 							displayMode={this.props.displayMode}
 						/>
