@@ -34,7 +34,6 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 				description: this.properties.description,
 				canvasId: this.properties.canvasId,
 				pinWebpartOnScroll: this.properties.pinWebpartOnScroll,
-				showButtonBackToTop: this.properties.showButtonBackToTop,
 				displayMode: this.displayMode,
 				// default SPO SPFx web part properties
 				context: this.context,
@@ -94,11 +93,6 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 									multiline: true,
 									rows: 8,
 									disabled: !this.properties.showTitleDescription,
-								}),
-								PropertyPaneToggle('showButtonBackToTop', {
-									label: 'Show back to top button',
-									onText: 'Yes',
-									offText: 'No',
 								}),
 								PropertyPaneToggle('pinWebpartOnScroll', {
 									label: 'Pin web part on scroll',

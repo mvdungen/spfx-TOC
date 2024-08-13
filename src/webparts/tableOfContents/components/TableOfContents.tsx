@@ -3,12 +3,12 @@ import * as React from 'react';
 import { TOC_ID, TOC_OBS_ID, TOC_PLACEHOLDER } from '../constants/constants';
 import type { ITableOfContentsProps } from '../interfaces/ITableOfContentsProps';
 
+import EmptyWebPart from './emptywebpart/EmptyWebPart';
 import TitleDescriptionSection from './titledescription/TitleDescriptionSection';
 import TOC from './toc/TOC';
+import { DisplayMode } from '@microsoft/sp-core-library';
 
 import styles from './TableOfContents.module.scss';
-import { DisplayMode } from '@microsoft/sp-core-library';
-import EmptyWebPart from './emptywebpart/EmptyWebPart';
 
 export default class TableOfContents extends React.Component<ITableOfContentsProps, {}> {
 	componentDidMount(): void {
@@ -49,7 +49,6 @@ export default class TableOfContents extends React.Component<ITableOfContentsPro
 							context={this.props.context}
 							canvasId={this.props.canvasId}
 							pin={this.props.pinWebpartOnScroll}
-							showButtonBackToTop={this.props.showButtonBackToTop}
 							displayMode={this.props.displayMode}
 						/>
 					</div>
