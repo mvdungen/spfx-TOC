@@ -26,7 +26,7 @@ export function setTOCPosition(props: {
 			if (props.dimensions) {
 				_position = 'fixed';
 				_zIndex = '100';
-				_top = `${props.dimensions.top + 24}px`;
+				_top = `${props.dimensions.top}px`;
 				_width = `${props.dimensions.width}px`;
 				_height = `${props.elmTOC.clientHeight}px`;
 			}
