@@ -31,13 +31,16 @@ export default function WPDescription(props: IWPDescriptionProps): React.ReactNo
 		// edit mode > render a textbox to allow direct editing of title
 		return (
 			<TextField
-				role='textbox' as='p'
+				role='textbox'
+				as='p'
 				styles={{
 					root: { marginLeft: '-8px', marginBottom: '8px' },
 					field: { fontSize: '18px', lineHeight: '1.3' },
 				}}
 				borderless
 				placeholder={EMPTY_DESCRIPTION}
+				autoAdjustHeight
+				resizable={false}
 				multiline
 				defaultValue={props.description}
 				onChange={(e, value: string | undefined) => {
