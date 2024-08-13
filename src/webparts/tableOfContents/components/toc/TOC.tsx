@@ -5,12 +5,12 @@ import { ITOCItem } from '../../interfaces/ITOCItem';
 
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
+import TOCItem from './TOCItem';
 
 import { getTOCItemsFromContent } from './fnGetTOCItemFromContent';
 import { setTOCPosition } from './fnSetTOCPosition';
 
 import styles from '../TableOfContents.module.scss';
-import TOCItem from './TOCItem';
 
 export interface ITOCProps {
 	context: WebPartContext;
@@ -60,7 +60,6 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 
 		// clear observer -----------------
 		return () => {
-			// clean up
 			obs.disconnect();
 		};
 	}, [props]);
@@ -96,6 +95,11 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 					observer.observe(_heading);
 				});
 			}
+		}
+
+		// clear observer -----------------
+		return () => {
+			observer.disconnect();
 		}
 	}, []);
 
