@@ -4,11 +4,13 @@ import { TOC_ID, TOC_OBS_ID, TOC_PLACEHOLDER } from '../constants/constants';
 import type { ITableOfContentsProps } from '../interfaces/ITableOfContentsProps';
 
 import EmptyWebPart from './emptywebpart/EmptyWebPart';
-import TitleDescriptionSection from './titledescription/TitleDescriptionSection';
 import TOC from './toc/TOC';
 import { DisplayMode } from '@microsoft/sp-core-library';
 
 import styles from './TableOfContents.module.scss';
+
+import WPTitle from './ui/WPTitle';
+import WPDescription from './ui/WPDescription';
 
 export default class TableOfContents extends React.Component<ITableOfContentsProps, {}> {
 	constructor(props: ITableOfContentsProps) {
@@ -37,12 +39,19 @@ export default class TableOfContents extends React.Component<ITableOfContentsPro
 				<div id={TOC_OBS_ID} />
 				<section className={styles.tableOfContents} id={TOC_ID}>
 					<div>
-						{/* show title and description */}
-						<TitleDescriptionSection
-							showTitleDescription={this.props.showTitleDescription}
-							title={this.props.title}
-							description={this.props.description}
-						/>
+						<div className={styles.section_titledescription}>
+							{/* web part title > allow edit on screen */}
+							<WPTitle
+								title={this.props.title}
+								displayMode={this.props.displayMode}
+								updateProperty={this.props.updateProperty}
+							/>
+							<WPDescription
+								description={this.props.description}
+								displayMode={this.props.displayMode}
+								updateProperty={this.props.updateProperty}
+							/>
+						</div>
 						{/* show heading in specified section on the page */}
 						<TOC
 							context={this.props.context}
@@ -61,5 +70,4 @@ export default class TableOfContents extends React.Component<ITableOfContentsPro
 	}
 
 	// private methods
-
 }

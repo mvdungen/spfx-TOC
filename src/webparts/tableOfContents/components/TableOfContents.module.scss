@@ -21,18 +21,24 @@
 	}
 
 	.section_titledescription {
-		padding: 8px 0px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		margin-bottom: 16px;
 
 		.title {
-			padding-bottom: 8px;
+			display: block;
+			padding-top: 8px;
+			font-size: var(--fontSizeHero700);
+			font-weight: var(--fontWeightSemibold);
 		}
 		.description {
-			padding-bottom: 0px;
+			display: block;
 		}
 	}
 
 	.section_toc {
-		padding: 8px 0px;
+		padding: 0px;
 
 		.toc_item {
 			display: block;
@@ -46,10 +52,9 @@
 				cursor: pointer;
 				padding: 5px 0px;
 				opacity: 0.6;
-
 			}
 			.toc_item_text:hover {
-				opacity: 1.0;
+				opacity: 1;
 			}
 		}
 		.toc_item:hover {

@@ -11,7 +11,7 @@ import {
 	PropertyPaneButton,
 	PropertyPaneChoiceGroup,
 	PropertyPaneHorizontalRule,
-	PropertyPaneTextField,
+	PropertyPaneLabel,
 	PropertyPaneToggle,
 } from '@microsoft/sp-property-pane';
 import { Version } from '@microsoft/sp-core-library';
@@ -30,13 +30,26 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 		const element: React.ReactElement<ITableOfContentsProps> = React.createElement(
 			TableOfContents,
 			{
-				showTitleDescription: this.properties.showTitleDescription,
 				title: this.properties.title,
 				description: this.properties.description,
 				canvasId: this.properties.canvasId,
 				pinWebpartOnScroll: this.properties.pinWebpartOnScroll,
 				levels: this.properties.levels,
 				displayMode: this.displayMode,
+				// method to update property
+				updateProperty: (property: keyof ITableOfContentsProps, value: unknown) => {
+					switch (property) {
+						case 'title':
+							this.properties.title = value as string;
+							break;
+						case 'description':
+							console.log('value=', value)
+							this.properties.description = value as string;
+							break;
+						default:
+						// do nothing, action for other properties not required...
+					}
+				},
 				// default SPO SPFx web part properties
 				context: this.context,
 				isDarkTheme: this._isDarkTheme,
@@ -81,20 +94,8 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 						{
 							groupName: 'Common Settings',
 							groupFields: [
-								PropertyPaneToggle('showTitleDescription', {
-									label: 'Show Title and Description',
-									onText: 'Yes',
-									offText: 'No',
-								}),
-								PropertyPaneTextField('title', {
-									label: 'Title',
-									disabled: !this.properties.showTitleDescription,
-								}),
-								PropertyPaneTextField('description', {
-									label: 'Description',
-									multiline: true,
-									rows: 8,
-									disabled: !this.properties.showTitleDescription,
+								PropertyPaneLabel('', {
+									text: 'Note: you can change the title and description directly in the web part on the page.',
 								}),
 								PropertyPaneChoiceGroup('levels', {
 									label: 'Levels to show',
