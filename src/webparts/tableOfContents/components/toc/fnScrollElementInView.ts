@@ -1,4 +1,3 @@
-import { PAGE_HEADER } from '../../constants/constants';
 import { DisplayMode } from '@microsoft/sp-core-library';
 
 /**
@@ -9,11 +8,12 @@ import { DisplayMode } from '@microsoft/sp-core-library';
  *   IMPORTANT: since SPO will auto collapse the main header on the page when scrolling,
  *              clicking on the first item in the TOC will expand the SPO header again
  *              resulting in not showing the first item on the page. Therefor the 'index'
- *              property which will result in an alternate element to scroll to.
- *              
+ *              property which will result in an alternate element to scroll to when the
+ * 				first (index = 0) element is clicked!
+ *
  * @param elementId string; id of element to scroll to
  * @param index number; identifies if user clicked on first item
- * @param displayMode DisplayMode; 1 = Read, 2 = Edit 
+ * @param displayMode DisplayMode; 1 = Read, 2 = Edit; used to determine if scroll is allowed
  */
 export function scrollElementInView(props: {
 	elementId: string;
@@ -24,15 +24,15 @@ export function scrollElementInView(props: {
 		// if we're in edit mode, do nothing
 	} else {
 		// else, set default element to scroll to
-		let _elm: HTMLElement | null = document.getElementById(props.elementId);
+		const _elm: HTMLElement | null = document.getElementById(props.elementId);
 		// check passed index, if index = 0 then we need another ID because, the first
 		// index is not that hihg up in the page that it scrolls to the right position
-		if (props.index === 0) {
-			_elm = document.querySelector(PAGE_HEADER);
-		}
+		// if (props.index === 0) {
+		// 	_elm = document.getElementById(TOC_TOP);
+		// }
 		// and scroll element into the current view
 		if (_elm) {
-			_elm.scrollIntoView({ behavior: 'smooth' });
+			_elm.scrollIntoView({ behavior: 'smooth', inline: 'start' });
 		}
 	}
 }

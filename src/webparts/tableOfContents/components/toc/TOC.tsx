@@ -24,6 +24,8 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 	//
 	// state and initialisation
 
+	const refTOCTop = React.useRef<ITOCItem | null>(null);
+
 	// component mount --------------------------------------------------------
 
 	React.useEffect(() => {
@@ -96,15 +98,40 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 		}
 	}, []);
 
+	// React.useEffect(() => {
+	// 	if (props.pin && props.displayMode === DisplayMode.Read) {
+	// 		// first check if we already added the element
+	// 		const _top: HTMLElement | null = document.getElementById(TOC_TOP);
+	// 		if (_top === null && refTOCTop.current) {
+	// 			// then check if we can find the first TOC element
+	// 			const _elmBefore: HTMLElement | undefined = getCanvasNode({
+	// 				canvasId: props.canvasId,
+	// 			});
+	// 			if (_elmBefore) {
+	// 				// create the new TOP element and insert it before the selected canvas node
+	// 				const _elmToInsert: HTMLElement = document.createElement('div');
+	// 				_elmToInsert.id = TOC_TOP;
+	// 				_elmBefore.insertBefore(_elmToInsert, null);
+	// 			}
+	// 		}
+	// 	}
+	// }, [refTOCTop.current]);
+
 	// helper components ------------------------------------------------------
 
 	const TOCHeadings = (): JSX.Element => {
 		// extract all heading from HTML content
 		const _results: JSX.Element[] = [];
 		// and iterate each toc item to create a JSX element from it
-		getTOCItemsFromContent({ canvasId: props.canvasId }).forEach((_tocItem: ITOCItem) => {
-			_results.push(<TOCItem item={_tocItem} displayMode={props.displayMode} />);
-		});
+		getTOCItemsFromContent({ canvasId: props.canvasId }).forEach(
+			(_tocItem: ITOCItem, _index: number) => {
+				if (_index === 0 && props.pin && props.displayMode === DisplayMode.Read) {
+					// we're pinning the toc and this is the first element > callback to add top element
+					refTOCTop.current = _tocItem;
+				}
+				_results.push(<TOCItem item={_tocItem} displayMode={props.displayMode} />);
+			}
+		);
 		// and return the table of contents
 		return <div>{_results.map(_elm => _elm)}</div>;
 	};

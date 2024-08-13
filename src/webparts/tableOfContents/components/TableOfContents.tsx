@@ -11,24 +11,23 @@ import { DisplayMode } from '@microsoft/sp-core-library';
 import styles from './TableOfContents.module.scss';
 
 export default class TableOfContents extends React.Component<ITableOfContentsProps, {}> {
+	constructor(props: ITableOfContentsProps) {
+		super(props);
+	}
+
 	componentDidMount(): void {
-		if (this.props.displayMode === DisplayMode.Edit) {
-			// mark the selected area
-		}
+		// componentDidMount
 	}
 
 	componentDidUpdate(prevProps: Readonly<ITableOfContentsProps>, prevState: Readonly<{}>): void {
-		if (this.props.displayMode === DisplayMode.Edit) {
-			// edit mode AND canvas section changed > update marking
-		}
+		// componentDidUpdate
 	}
 
 	public render(): React.ReactElement<ITableOfContentsProps> {
-
 		if (this.props.canvasId === undefined) {
 			// no canvas area selected, return error when in edit mode
 			if (this.props.displayMode === DisplayMode.Edit) {
-				return <EmptyWebPart />
+				return <EmptyWebPart />;
 			}
 		}
 
