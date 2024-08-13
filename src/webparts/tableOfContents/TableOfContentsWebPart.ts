@@ -20,6 +20,7 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import TableOfContents from './components/TableOfContents';
 
 import styles from './components/TableOfContents.module.scss';
+import { getCanvasNode } from './components/toc/fnGetCanvasNodeText';
 
 export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITableOfContentsProps> {
 	private _isDarkTheme: boolean = false;
@@ -110,26 +111,11 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 										: 'Show selected area(s)',
 									disabled: this.properties.canvasId === undefined,
 									onClick: () => {
-										// get area
-										const _id: number = this.properties.canvasId;
-										const _canvasList: NodeListOf<HTMLElement> =
-											document.querySelectorAll(CANVAS_ID);
-										// get selected and mark this one
-										if (_canvasList && _canvasList.length > 0) {
-											// add class to selected canvas area
-											const _canvasItem: HTMLElement = _canvasList[_id];
-											if (this._isMarked) {
-												// unmark
-												_canvasItem.classList.remove(styles.mark_area);
-												// set flag
-												this._isMarked = false;
-											} else {
-												// unmark
-												_canvasItem.classList.add(styles.mark_area);
-												// set flag
-												this._isMarked = true;
-											}
-										}
+										// toggle marked area
+										this._toggleMarkedArea(
+											this.properties.canvasId,
+											!this._isMarked
+										);
 									},
 								}),
 							],
@@ -138,6 +124,23 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 				},
 			],
 		};
+	}
+
+	protected onPropertyPaneFieldChanged(
+		propertyPath: string,
+		oldValue: unknown,
+		newValue: unknown
+	): void {
+		switch (propertyPath) {
+			case 'canvasId':
+				// switch off old area
+				this._toggleMarkedArea(oldValue as number, false);
+				// switch on new area
+				this._toggleMarkedArea(newValue as number, true);
+				break;
+			default:
+			// do nothing > future use...
+		}
 	}
 
 	// private methods
@@ -158,5 +161,23 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 			});
 		}
 		return _results;
+	}
+
+	private _toggleMarkedArea(canvasId: number, toggle: boolean): void {
+		// get area
+		const _canvasItem: HTMLElement | undefined = getCanvasNode({
+			canvasId: canvasId,
+		});
+		if (_canvasItem) {
+			if (toggle) {
+				// mark
+				_canvasItem.classList.add(styles.mark_area);
+			} else {
+				// unmark
+				_canvasItem.classList.remove(styles.mark_area);
+			}
+		}
+		// set flag
+		this._isMarked = toggle;
 	}
 }
