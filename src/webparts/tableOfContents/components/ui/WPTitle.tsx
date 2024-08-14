@@ -38,7 +38,7 @@ export default function WPTitle(props: IWPTitleProps): React.ReactNode {
 				as='h2'
 				styles={{
 					root: { marginLeft: '-8px', paddingBottom: '8px' },
-					field: { fontWeight: 600, fontSize: '28px' },
+					field: { fontWeight: 600, fontSize: '28px', height: '40px' },
 				}}
 				borderless
 				placeholder={EMPTY_TITLE}

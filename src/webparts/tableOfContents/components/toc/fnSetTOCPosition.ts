@@ -26,7 +26,9 @@ export function setTOCPosition(props: {
 			if (props.dimensions) {
 				_position = 'fixed';
 				_zIndex = '100';
-				_top = `${props.dimensions.top + 24}px`;
+				// it seems that the best solution here is the set to a comfortable 205 pixels 😳 the
+				// main header is 205 pixels heigh, when not collapsed when scrolling 
+				_top = '205px'; // `${props.dimensions.top + 24}px`;
 				_width = `${props.dimensions.width}px`;
 				_height = `${props.elmTOC.clientHeight}px`;
 			}
