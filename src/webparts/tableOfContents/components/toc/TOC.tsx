@@ -18,6 +18,7 @@ export interface ITOCProps {
 	canvasIds: number[];
 	levels: string;
 	pin: boolean;
+	isHeaderCollapsed: boolean;
 	displayMode: DisplayMode;
 }
 export interface ITOCState {}
@@ -98,10 +99,15 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 				props.canvasIds.forEach((_canvasId: number) => {
 					// get element containing all content
 					const _elm = _elms[_canvasId];
-					// start observing
-					_elm.querySelectorAll('h1, h2, h3, h4, h5').forEach(_heading => {
-						observer.observe(_heading);
-					});
+					// check element > we need to check, because the web part could be moved or
+					// a section could be removed, the selected section will not update in this
+					// web part, therefor check the element
+					if (_elm) {
+						// start observing
+						_elm.querySelectorAll('h1, h2, h3, h4, h5').forEach(_heading => {
+							observer.observe(_heading);
+						});
+					}
 				});
 			}
 		}
@@ -155,7 +161,12 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 	// component render -------------------------------------------------------
 
 	return (
-		<div className={styles.section_toc}>
+		<div
+			className={styles.section_toc}
+			// do not show TOC if header is collapsed; we need do to that here because we need
+			// the observer to make the TOC sticky; we cannot do this in the parent component!
+			style={{ display: props.isHeaderCollapsed ? 'none' : 'block' }}
+		>
 			<TOCHeadings />
 		</div>
 	);

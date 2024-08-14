@@ -39,6 +39,8 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 				canvasIds: this.properties.canvasIds,
 				pinWebpartOnScroll: this.properties.pinWebpartOnScroll,
 				levels: this.properties.levels,
+				collapsibleHeader: this.properties.collapsibleHeader,
+				defaultCollapsed: this.properties.defaultCollapsed,
 				displayMode: this.displayMode,
 				// method to update property
 				updateProperty: (property: keyof ITableOfContentsProps, value: unknown) => {
@@ -131,6 +133,17 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 									label: 'Pin web part on scroll',
 									onText: 'Yes',
 									offText: 'No',
+								}),
+								PropertyPaneToggle('collapsibleHeader', {
+									label: 'Expand/Collapse header',
+									onText: 'Yes',
+									offText: 'No',
+								}),
+								PropertyPaneToggle('defaultCollapsed', {
+									label: 'By default, collapse header',
+									onText: 'Yes',
+									offText: 'No',
+									disabled: this.properties.collapsibleHeader === false
 								}),
 							],
 						},

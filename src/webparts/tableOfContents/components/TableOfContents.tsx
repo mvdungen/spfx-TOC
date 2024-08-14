@@ -10,10 +10,21 @@ import WPDescription from './ui/WPDescription';
 import TOC from './toc/TOC';
 
 import styles from './TableOfContents.module.scss';
+import { ITableOfContentsState } from '../interfaces/ITableOfContentsState';
 
-export default class TableOfContents extends React.Component<ITableOfContentsProps, {}> {
+export default class TableOfContents extends React.Component<
+	ITableOfContentsProps,
+	ITableOfContentsState
+> {
 	constructor(props: ITableOfContentsProps) {
+		// call parent
 		super(props);
+		// bind this to component
+		this._toggleHeader = this._toggleHeader.bind(this);
+		// set initial state
+		this.state = {
+			isHeaderCollapsed: this.props.collapsibleHeader ? this.props.defaultCollapsed || false : false,
+		};
 	}
 
 	componentDidMount(): void {
@@ -39,16 +50,21 @@ export default class TableOfContents extends React.Component<ITableOfContentsPro
 			<>
 				{/* first div is observer in the TOC and when it reaches the top, the TOC div will be fixed */}
 				<div id={TOC_OBS_ID} />
+				{/* title, description and toc > check collapsible headers */}
 				<section className={styles.tableOfContents} id={TOC_ID}>
 					<div className={styles.section_titledescription}>
 						{/* web part title > allow edit on screen */}
 						<WPTitle
 							title={this.props.title}
+							canHeaderCollapse={this.props.collapsibleHeader}
+							isHeaderCollapsed={this.state.isHeaderCollapsed}
+							callbackToggleHeader={this._toggleHeader}
 							displayMode={this.props.displayMode}
 							updateProperty={this.props.updateProperty}
 						/>
 						<WPDescription
 							description={this.props.description}
+							isHeaderCollapsed={this.state.isHeaderCollapsed}
 							displayMode={this.props.displayMode}
 							updateProperty={this.props.updateProperty}
 						/>
@@ -59,6 +75,7 @@ export default class TableOfContents extends React.Component<ITableOfContentsPro
 						canvasIds={this.props.canvasIds}
 						levels={this.props.levels}
 						pin={this.props.pinWebpartOnScroll}
+						isHeaderCollapsed={this.state.isHeaderCollapsed}
 						displayMode={this.props.displayMode}
 					/>
 				</section>
@@ -70,4 +87,11 @@ export default class TableOfContents extends React.Component<ITableOfContentsPro
 	}
 
 	// private methods
+
+	private _toggleHeader(toggle: boolean): void {
+		// toggle header expand/collapse
+		this.setState({
+			isHeaderCollapsed: toggle,
+		});
+	}
 }

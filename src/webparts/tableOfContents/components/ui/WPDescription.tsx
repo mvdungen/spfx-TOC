@@ -10,6 +10,7 @@ import styles from '../TableOfContents.module.scss';
 
 export interface IWPDescriptionProps {
 	description: string;
+	isHeaderCollapsed: boolean;
 	displayMode: DisplayMode;
 	updateProperty: (property: keyof ITableOfContentsProps, value: unknown) => void;
 }
@@ -56,7 +57,12 @@ export default function WPDescription(props: IWPDescriptionProps): React.ReactNo
 		return null;
 	} else {
 		return (
-			<Text variant='large' className={styles.description}>
+			<Text
+				variant='large'
+				className={styles.description}
+				// do not show description if header is collapsed
+				style={{ display: props.isHeaderCollapsed ? 'none' : 'block' }}
+			>
 				{props.description}
 			</Text>
 		);

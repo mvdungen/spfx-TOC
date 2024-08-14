@@ -4,12 +4,15 @@ import { EMPTY_TITLE } from '../../constants/constants';
 import { ITableOfContentsProps } from '../../interfaces/ITableOfContentsProps';
 
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { Text, TextField } from '@fluentui/react';
+import { TextField } from '@fluentui/react';
 
-import styles from '../TableOfContents.module.scss';
+import CollapsibleHeader from './CollapsibleHeader';
 
 export interface IWPTitleProps {
 	title: string;
+	canHeaderCollapse: boolean;
+	isHeaderCollapsed: boolean;
+	callbackToggleHeader: (toggle: boolean) => void;
 	displayMode: DisplayMode;
 	updateProperty: (property: keyof ITableOfContentsProps, value: unknown) => void;
 }
@@ -53,9 +56,12 @@ export default function WPTitle(props: IWPTitleProps): React.ReactNode {
 		return null;
 	} else {
 		return (
-			<Text role='heading' className={styles.title}>
-				{props.title}
-			</Text>
+			<CollapsibleHeader
+				text={props.title}
+				canHeaderCollapse={props.canHeaderCollapse}
+				isHeaderCollapsed={props.isHeaderCollapsed}
+				callbackToggleHeader={props.callbackToggleHeader}
+			/>
 		);
 	}
 }

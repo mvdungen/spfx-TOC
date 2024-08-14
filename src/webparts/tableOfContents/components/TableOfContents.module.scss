@@ -67,6 +67,18 @@
 			font-weight: 500;
 		}
 	}
+
+	.section_collapseheader {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-end;
+
+		.icon_toggle {
+			font-size: var(--fontSizeHero700);
+		}
+
+	}
 }
 
 .mark_area {

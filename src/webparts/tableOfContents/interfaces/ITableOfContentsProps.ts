@@ -8,6 +8,8 @@ export interface ITableOfContentsProps {
   canvasIds: number[];
   pinWebpartOnScroll: boolean;
   levels: string;
+  collapsibleHeader: boolean;
+  defaultCollapsed: boolean;
   displayMode: DisplayMode;
   // update method to update properties from web part directly
   updateProperty: (propery: keyof ITableOfContentsProps, value: unknown) => void;
