@@ -1,12 +1,12 @@
 import { CANVAS_ID } from '../../constants/constants';
 
 /**
- * getCanvasNodeText
- * @description retrieves the canvas node element inner text from the current page
+ * getCanvasNodeHTML
+ * @description retrieves the canvas node element inner HTML from the current page
  * @param canvasId number; id of canvasNode in document
- * @returns string; text from desired canvas node
+ * @returns string; HTML from desired canvas node
  */
-export function getCanvasNodeText(props: { canvasId: number }): string {
+export function getCanvasNodeHTML(props: { canvasId: number }): string {
 	let _result: string = '';
 
 	try {

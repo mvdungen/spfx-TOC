@@ -14,7 +14,8 @@ import styles from '../TableOfContents.module.scss';
 
 export interface ITOCProps {
 	context: WebPartContext;
-	canvasId: number;
+	// canvasId: number;
+	canvasIds: number[];
 	levels: string;
 	pin: boolean;
 	displayMode: DisplayMode;
@@ -30,6 +31,9 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 	// component mount --------------------------------------------------------
 
 	React.useEffect(() => {
+		// useEffect > initialise observer to fix position of web part at the top
+		// 			   of the page when scrolling
+		//
 		const obs = new IntersectionObserver(([es]) => {
 			if (es) {
 				// get element which we're observing
@@ -65,7 +69,9 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 	}, [props]);
 
 	React.useEffect(() => {
-		// add observer task to mark active heading in TOC
+		// useEffect > initialize observer to mark headings when heading are in
+		// 			   the visual viewport of the page
+		//
 		const observer = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
 			entries.forEach((entry: IntersectionObserverEntry) => {
 				// set entry id
@@ -84,15 +90,18 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 				}
 			});
 		});
-		if (props.canvasId !== undefined) {
-			// get correct canvas element
+		if (props.canvasIds !== undefined && props.canvasIds.length > 0) {
+			// get all canvas content elements
 			const _elms = document.querySelectorAll(CANVAS_ID);
 			if (_elms && _elms.length > 0) {
-				// get element containing all content
-				const _elm = _elms[props.canvasId];
-				// start observing
-				_elm.querySelectorAll('h1, h2, h3, h4, h5').forEach(_heading => {
-					observer.observe(_heading);
+				// iterate all canvas content element and observe selected elements
+				props.canvasIds.forEach((_canvasId: number) => {
+					// get element containing all content
+					const _elm = _elms[_canvasId];
+					// start observing
+					_elm.querySelectorAll('h1, h2, h3, h4, h5').forEach(_heading => {
+						observer.observe(_heading);
+					});
 				});
 			}
 		}
@@ -100,7 +109,7 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 		// clear observer -----------------
 		return () => {
 			observer.disconnect();
-		}
+		};
 	}, []);
 
 	// React.useEffect(() => {
@@ -128,7 +137,7 @@ export default function TOC(props: ITOCProps): React.ReactNode {
 		// extract all heading from HTML content
 		const _results: JSX.Element[] = [];
 		// and iterate each toc item to create a JSX element from it
-		getTOCItemsFromContent({ canvasId: props.canvasId, levels: props.levels }).forEach(
+		getTOCItemsFromContent({ canvasIds: props.canvasIds, levels: props.levels }).forEach(
 			(_tocItem: ITOCItem, _index: number) => {
 				if (_index === 0 && props.pin && props.displayMode === DisplayMode.Read) {
 					// we're pinning the toc and this is the first element > callback to add top element

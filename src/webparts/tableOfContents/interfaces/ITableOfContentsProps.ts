@@ -5,7 +5,7 @@ export interface ITableOfContentsProps {
   // web part specific properties
   title: string;
   description: string;
-  canvasId: number;
+  canvasIds: number[];
   pinWebpartOnScroll: boolean;
   levels: string;
   displayMode: DisplayMode;

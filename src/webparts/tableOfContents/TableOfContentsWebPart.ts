@@ -8,6 +8,7 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import {
 	IPropertyPaneChoiceGroupOption,
 	type IPropertyPaneConfiguration,
+	IPropertyPaneDropdownOption,
 	PropertyPaneButton,
 	PropertyPaneChoiceGroup,
 	PropertyPaneHorizontalRule,
@@ -16,15 +17,18 @@ import {
 } from '@microsoft/sp-property-pane';
 import { Version } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect';
 
 import TableOfContents from './components/TableOfContents';
 
-import styles from './components/TableOfContents.module.scss';
 import { getCanvasNode } from './components/toc/fnGetCanvasNodeText';
+
+import styles from './components/TableOfContents.module.scss';
 
 export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITableOfContentsProps> {
 	private _isDarkTheme: boolean = false;
-	private _isMarked: boolean = false;
+	private _isMarked: boolean = false; // used as flag for marking areas when clicking buttons
+	private _sectionAreas: number[] = []; // used for referencing when marking/unmarking areas
 
 	public render(): void {
 		const element: React.ReactElement<ITableOfContentsProps> = React.createElement(
@@ -32,7 +36,7 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 			{
 				title: this.properties.title,
 				description: this.properties.description,
-				canvasId: this.properties.canvasId,
+				canvasIds: this.properties.canvasIds,
 				pinWebpartOnScroll: this.properties.pinWebpartOnScroll,
 				levels: this.properties.levels,
 				displayMode: this.displayMode,
@@ -43,7 +47,6 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 							this.properties.title = value as string;
 							break;
 						case 'description':
-							console.log('value=', value)
 							this.properties.description = value as string;
 							break;
 						default:
@@ -92,37 +95,42 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 					},
 					groups: [
 						{
-							groupName: 'Common Settings',
+							groupName: 'Content Area(s) and Levels',
 							groupFields: [
 								PropertyPaneLabel('', {
-									text: 'Note: you can change the title and description directly in the web part on the page.',
-								}),
-								PropertyPaneChoiceGroup('levels', {
-									label: 'Levels to show',
-									options: this.getLevels(),
-								}),
-								PropertyPaneToggle('pinWebpartOnScroll', {
-									label: 'Pin web part on scroll',
-									onText: 'Yes',
-									offText: 'No',
+									text: 'You can change the title and description directly in the web part on the page.', 
 								}),
 								PropertyPaneHorizontalRule(),
-								PropertyPaneChoiceGroup('canvasId', {
-									label: 'Choose content area',
+								PropertyFieldMultiSelect('canvasIds', {
+									key: 'canvasIds',
+									label: 'Choose content area(s)',
 									options: this.getCanvasSections(),
+									selectedKeys: this.properties.canvasIds,
 								}),
 								PropertyPaneButton('', {
 									text: this._isMarked
 										? 'Hide selected area'
 										: 'Show selected area',
-									disabled: this.properties.canvasId === undefined,
+									disabled: this.properties.canvasIds === undefined,
+									icon: this._isMarked ? 'Hide3' : 'View',
 									onClick: () => {
 										// toggle marked area
 										this._toggleMarkedArea(
-											this.properties.canvasId,
+											this.properties.canvasIds,
 											!this._isMarked
 										);
 									},
+								}),
+								PropertyPaneHorizontalRule(),
+								PropertyPaneChoiceGroup('levels', {
+									label: 'Levels to show',
+									options: this.getLevels(),
+								}),
+								PropertyPaneHorizontalRule(),
+								PropertyPaneToggle('pinWebpartOnScroll', {
+									label: 'Pin web part on scroll',
+									onText: 'Yes',
+									offText: 'No',
 								}),
 							],
 						},
@@ -137,12 +145,24 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 		oldValue: unknown,
 		newValue: unknown
 	): void {
+		let _orderedAreas: number[] = [];
 		switch (propertyPath) {
 			case 'canvasId':
 				// switch off old area
 				this._toggleMarkedArea(oldValue as number, false);
 				// switch on new area
 				this._toggleMarkedArea(newValue as number, true);
+				break;
+			case 'canvasIds':
+				// make sure the selected areas are in order of appearance > sort the array
+				_orderedAreas = [...(newValue as number[])];
+				_orderedAreas.sort((a, b) => a - b);
+				// set property
+				this.properties.canvasIds = _orderedAreas;
+				// check if areas are marked
+				if (this._isMarked) {
+					this._toggleMarkedArea(this.properties.canvasIds, this._isMarked);
+				}
 				break;
 			default:
 			// do nothing > future use...
@@ -151,8 +171,8 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 
 	// private methods
 
-	private getCanvasSections(): IPropertyPaneChoiceGroupOption[] {
-		const _results: IPropertyPaneChoiceGroupOption[] = [];
+	private getCanvasSections(): IPropertyPaneDropdownOption[] {
+		const _results: IPropertyPaneDropdownOption[] = [];
 		const _elms = document.querySelectorAll(CANVAS_ID);
 
 		if (_elms && _elms.length > 0) {
@@ -163,9 +183,11 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 						key: _index,
 						text: `Section ${_index + 1}`,
 					});
+					this._sectionAreas.push(_index);
 				}
 			});
 		}
+		// return areas
 		return _results;
 	}
 
@@ -178,20 +200,32 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 		];
 	}
 
-	private _toggleMarkedArea(canvasId: number, toggle: boolean): void {
-		// get area
-		const _canvasItem: HTMLElement | undefined = getCanvasNode({
-			canvasId: canvasId,
-		});
-		if (_canvasItem) {
-			if (toggle) {
-				// mark
-				_canvasItem.classList.add(styles.mark_area);
-			} else {
-				// unmark
-				_canvasItem.classList.remove(styles.mark_area);
-			}
+	private _toggleMarkedArea(canvasId: number | number[], toggle: boolean): void {
+		// initialize
+		let _areasNrs: number[] = [];
+		// check parameter: number or number[]
+		if (typeof canvasId === 'object') {
+			_areasNrs = canvasId;
+		} else {
+			_areasNrs = [canvasId];
 		}
+		// iterate through all areas and toggle the marking
+		this._sectionAreas.forEach((_areasNr: number) => {
+			// get area
+			const _canvasItem: HTMLElement | undefined = getCanvasNode({
+				canvasId: _areasNr,
+			});
+			if (_canvasItem) {
+				const _toggleOn: boolean = toggle ? _areasNrs.indexOf(_areasNr) > -1 : false;
+				if (_toggleOn) {
+					// mark
+					_canvasItem.classList.add(styles.mark_area);
+				} else {
+					// unmark
+					_canvasItem.classList.remove(styles.mark_area);
+				}
+			}
+		});
 		// set flag
 		this._isMarked = toggle;
 	}
