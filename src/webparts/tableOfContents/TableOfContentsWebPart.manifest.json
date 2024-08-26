@@ -22,7 +22,8 @@
 			"officeFabricIconFontName": "List",
 			"properties": {
 				"pinWebpartOnScroll": true,
-				"collapsibleHeader": false
+				"collapsibleHeader": false,
+				"levels": "h1, h2, h3"
 			}
 		}
 	]

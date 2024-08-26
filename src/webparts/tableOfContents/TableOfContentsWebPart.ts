@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 
-import { CANVAS_ID, COLOR_DEFINITION_ELM, COLOR_VAR_LIST } from './constants/constants';
+import { CANVAS_ID } from './constants/constants';
 
 import { ITableOfContentsProps } from './interfaces/ITableOfContentsProps';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
@@ -19,11 +19,11 @@ import { Version } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
 import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect';
-import {
-	IPropertyFieldSwatchColorOption,
-	PropertyFieldSwatchColorPicker,
-	PropertyFieldSwatchColorPickerStyle,
-} from '@pnp/spfx-property-controls/lib/PropertyFieldSwatchColorPicker';
+// import {
+// 	IPropertyFieldSwatchColorOption,
+// 	PropertyFieldSwatchColorPicker,
+// 	PropertyFieldSwatchColorPickerStyle,
+// } from '@pnp/spfx-property-controls/lib/PropertyFieldSwatchColorPicker';
 
 import TableOfContents from './components/TableOfContents';
 
@@ -152,16 +152,16 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 									offText: 'No',
 									disabled: this.properties.collapsibleHeader === false,
 								}),
-								PropertyFieldSwatchColorPicker('bgColor', {
-									key: 'colorFieldId',
-									label: 'Choose alternate background color',
-									selectedColor: this.properties.bgColor,
-									colors: this.getAlternateBGColors(),
-									onPropertyChange: this.onPropertyPaneFieldChanged,
-									properties: this.properties,
-									showAsCircles: false,
-									style: PropertyFieldSwatchColorPickerStyle.Full,
-								}),
+								// PropertyFieldSwatchColorPicker('bgColor', {
+								// 	key: 'colorFieldId',
+								// 	label: 'Choose alternate background color',
+								// 	selectedColor: this.properties.bgColor,
+								// 	colors: this.getAlternateBGColors(),
+								// 	onPropertyChange: this.onPropertyPaneFieldChanged,
+								// 	properties: this.properties,
+								// 	showAsCircles: false,
+								// 	style: PropertyFieldSwatchColorPickerStyle.Full,
+								// }),
 							],
 						},
 					],
@@ -230,24 +230,24 @@ export default class TableOfContentsWebPart extends BaseClientSideWebPart<ITable
 		];
 	}
 
-	private getAlternateBGColors(): IPropertyFieldSwatchColorOption[] {
-		const _results: IPropertyFieldSwatchColorOption[] = [];
+	// private getAlternateBGColors(): IPropertyFieldSwatchColorOption[] {
+	// 	const _results: IPropertyFieldSwatchColorOption[] = [];
 
-		// get element where fluid UI defines all colors
-		const _fluidElm: HTMLElement | null = document.querySelector(COLOR_DEFINITION_ELM);
-		if (_fluidElm) {
-			// iterate through each color and set result
-			COLOR_VAR_LIST.forEach(_color => {
-				// get the css color value
-				const _colorVal: string = getComputedStyle(_fluidElm).getPropertyValue(_color);
-				// add result to color array
-				_results.push({
-					color: _colorVal,
-				});
-			});
-		}
-		return _results;
-	}
+	// 	// get element where fluid UI defines all colors
+	// 	const _fluidElm: HTMLElement | null = document.querySelector(COLOR_DEFINITION_ELM);
+	// 	if (_fluidElm) {
+	// 		// iterate through each color and set result
+	// 		COLOR_VAR_LIST.forEach(_color => {
+	// 			// get the css color value
+	// 			const _colorVal: string = getComputedStyle(_fluidElm).getPropertyValue(_color);
+	// 			// add result to color array
+	// 			_results.push({
+	// 				color: _colorVal,
+	// 			});
+	// 		});
+	// 	}
+	// 	return _results;
+	// }
 
 	private _toggleMarkedArea(canvasId: number | number[], toggle: boolean): void {
 		// initialize
