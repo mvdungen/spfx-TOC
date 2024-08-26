@@ -23,7 +23,9 @@ export default class TableOfContents extends React.Component<
 		this._toggleHeader = this._toggleHeader.bind(this);
 		// set initial state
 		this.state = {
-			isHeaderCollapsed: this.props.collapsibleHeader ? this.props.defaultCollapsed || false : false,
+			isHeaderCollapsed: this.props.collapsibleHeader
+				? this.props.defaultCollapsed || false
+				: false,
 		};
 	}
 
@@ -51,7 +53,13 @@ export default class TableOfContents extends React.Component<
 				{/* first div is observer in the TOC and when it reaches the top, the TOC div will be fixed */}
 				<div id={TOC_OBS_ID} />
 				{/* title, description and toc > check collapsible headers */}
-				<section className={styles.tableOfContents} id={TOC_ID}>
+				<section
+					className={styles.tableOfContents}
+					id={TOC_ID}
+					style={{
+						backgroundColor: this.props.bgColor || 'var(--colorNeutralBackground1)',
+					}}
+				>
 					<div className={styles.section_titledescription}>
 						{/* web part title > allow edit on screen */}
 						<WPTitle

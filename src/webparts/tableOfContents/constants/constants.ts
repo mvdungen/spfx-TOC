@@ -14,10 +14,10 @@ export const TOC_PLACEHOLDER: string = 'toc_placeholder';
 export const TOC_TOP: string = 'toc_top';
 
 /**
- * @constant INDENT_HEADER 
+ * @constant INDENT_HEADER
  * @description number; number of pixels to indent h2, h3, ...
  */
-export const INDENT_HEADER:number = 12;
+export const INDENT_HEADER: number = 12;
 
 /**
  * @constant EMPTY_...
@@ -25,3 +25,16 @@ export const INDENT_HEADER:number = 12;
  */
 export const EMPTY_TITLE: string = 'Web Part Title';
 export const EMPTY_DESCRIPTION: string = 'Web part description, start typing here to change...';
+
+/**
+ * @constant COLOR_VAR_LIST
+ * @description return the list of Fluid UI CSS variable used for theme coloring, use
+ *              for alternate background color of TOC with theme adjustments
+ */
+export const COLOR_DEFINITION_ELM: string = '.fui-FluentProvider1';
+export const COLOR_VAR_LIST: string[] = [
+	'--colorNeutralBackground1',
+	'--colorNeutralBackground3',
+	'--colorNeutralBackground5',
+	'--colorBrandBackground',
+];

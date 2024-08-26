@@ -20,7 +20,10 @@
 				"default": "The table of contents web part allows you to create a table of content on a normal SharePoint page."
 			},
 			"officeFabricIconFontName": "List",
-			"properties": {}
+			"properties": {
+				"pinWebpartOnScroll": true,
+				"collapsibleHeader": false
+			}
 		}
 	]
 }

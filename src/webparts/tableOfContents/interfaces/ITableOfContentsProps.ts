@@ -10,6 +10,7 @@ export interface ITableOfContentsProps {
   levels: string;
   collapsibleHeader: boolean;
   defaultCollapsed: boolean;
+  bgColor: string;
   displayMode: DisplayMode;
   // update method to update properties from web part directly
   updateProperty: (propery: keyof ITableOfContentsProps, value: unknown) => void;

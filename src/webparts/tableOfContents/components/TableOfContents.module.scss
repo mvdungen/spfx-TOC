@@ -1,9 +1,9 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
 .tableOfContents {
-	margin: -8px;
-	padding: 0px 8px;
-	background-color: var(--colorNeutralBackground1);
+	padding: 0px 0px 8px 0px;
+	// background-color: var(--colorNeutralBackground1);
+	border-radius: 4px;
 
 	.init_webpart {
 		display: flex;
@@ -24,11 +24,11 @@
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
+		padding: 0px 8px; // flexibel maken > als witte achtergrond, dan '0px' anders '0px 8px'
 		margin-bottom: 16px;
 
 		.title {
 			display: block;
-			padding-top: 8px;
 			font-size: var(--fontSizeHero700);
 			font-weight: var(--fontWeightSemibold);
 		}
@@ -39,7 +39,6 @@
 
 	.section_toc {
 		padding: 0px;
-		margin-bottom: 16px;
 
 		.toc_item {
 			display: block;
@@ -74,6 +73,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: flex-end;
+		cursor: pointer;
 
 		.icon_toggle {
 			font-size: var(--fontSizeHero700);

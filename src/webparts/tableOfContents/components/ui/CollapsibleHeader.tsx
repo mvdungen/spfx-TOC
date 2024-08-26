@@ -36,15 +36,21 @@ export default function CollapsibleHeader(props: ICollapsibleHeaderProps): React
 
 	// helper components ------------------------------------------------------
 
+	const Title = (): JSX.Element => {
+		return (
+			<Text role='heading' nowrap className={styles.title}>
+				{props.text}
+			</Text>
+		);
+	};
+
 	// component render -------------------------------------------------------
 
 	if (props.canHeaderCollapse) {
 		// return collapse header
 		return (
 			<div onClick={_toggleHeader} className={styles.section_collapseheader}>
-				<Text role='heading' className={styles.title}>
-					{props.text}
-				</Text>
+				<Title />
 				<Icon
 					iconName={isCollapsed ? 'ChevronDown' : 'ChevronUp'}
 					className={styles.icon_toggle}
@@ -53,10 +59,6 @@ export default function CollapsibleHeader(props: ICollapsibleHeaderProps): React
 		);
 	} else {
 		// return normal header
-		return (
-			<Text role='heading' className={styles.title}>
-				{props.text}
-			</Text>
-		);
+		return <Title />;
 	}
 }
