@@ -1,49 +1,89 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
 .tableOfContents {
-	margin: -8px;
-	padding: 0px 8px;
-	// border: 1px dashed red;
+	padding: 0px 0px 8px 0px;
+	// background-color: var(--colorNeutralBackground1);
+	border-radius: 4px;
+
+	.init_webpart {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		padding: 20px;
+		align-items: center;
+		justify-content: center;
+		background-color: var(--colorPaletteLightGreenBackground2);
+		border-radius: 5px;
+	}
 
 	.text_color {
 		color: inherit;
 	}
 
 	.section_titledescription {
-		padding: 8px 0px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 0px 8px; // flexibel maken > als witte achtergrond, dan '0px' anders '0px 8px'
+		margin-bottom: 16px;
 
 		.title {
-			padding-bottom: 8px;
+			display: block;
+			font-size: var(--fontSizeHero700);
+			font-weight: var(--fontWeightSemibold);
 		}
 		.description {
-			padding-bottom: 0px;
+			display: block;
 		}
 	}
 
 	.section_toc {
-		padding: 8px 0px;
+		padding: 0px;
 
 		.toc_item {
 			display: block;
 			box-sizing: border-box;
 			padding-bottom: 0px;
+			border-left: 3px solid var(--colorNeutralBackgroundInverted);
+			padding-left: 10px;
 
 			.toc_item_text {
 				display: block;
 				cursor: pointer;
 				padding: 5px 0px;
-				opacity: 0.5;
+				opacity: 0.6;
 			}
 			.toc_item_text:hover {
 				opacity: 1;
-				font-weight: 600;
 			}
+		}
+		.toc_item:hover {
+			border-left: 6px solid var(--colorNeutralBackgroundInverted);
+			padding-left: 8px;
 		}
 
 		.active span {
 			opacity: 1 !important;
-			font-weight: 700;
+			font-weight: 500;
 		}
 	}
 
+	.section_collapseheader {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-end;
+		cursor: pointer;
+
+		.icon_toggle {
+			font-size: var(--fontSizeHero700);
+		}
+
+	}
+}
+
+.mark_area {
+	margin: 4px;
+	padding: 4px;
+	border: 5px dashed red;
 }
