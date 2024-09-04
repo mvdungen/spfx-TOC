@@ -8,9 +8,13 @@ It works with any textual web part in the sections: **text web part** and/or **m
 
 When you're viewing the page, the heading in the viewport (visible area of the page) will be marked. Clicking on a heading will smoothly scroll the heading into the viewport.
 
-Quick view a sample of the web part, click the video below.
+Quick view a sample of the web part, click the video below the image to view a working sample.
 
-https://github.com/mvdungen/spfx-TOC/tree/main/docs/TOCSample01.mp4
+![Table of Contents Sample](./docs/TOCSample01.png)
+
+Click on the link below to view a video example of the web part.
+
+https://github.com/mvdungen/spfx-TOC/tree/dev/docs/TOCSample01.mp4
 
 ## Used SharePoint Framework Version
 
@@ -27,31 +31,31 @@ https://github.com/mvdungen/spfx-TOC/tree/main/docs/TOCSample01.mp4
 
 This web part has several features that can be set in the web part configuration page. Note that **web part title** and **web part description** can be directly managed within the web part it self. If no title and/or description is provided, these sections will be empty and will not take any space.
 
-### Configuration Panel
-
-Below the configuration panel with settings for this web part. Each setting is discussed below.
-
-![Configuration Panel](./docs/TOCSettings.png)
-
 ### Choose content area(s)
+
+![Settings - Content Areas](./docs/TOCSetContentAreas.png)
 
 When you open the configuration panel, you see a dropdown list containing all section(s) of your page. You can select multiple sections for your table of contents. Use the option *Show selected area(s)* to mark the selected section(s) on your page that will be used.
 
 ### Levels to show
 
+![Settings - Content Areas](./docs/TOCSetLevels.png)
+
 You can choose the number of headings to display. Note that you cannot use *Heading 1* from the dropdown menu in a text web part. Even if you start typing # there is no heading 1 created, it will always reset to heading 2.
 
 ### Pin web part on scroll
+
+![Settings - Content Areas](./docs/TOCSetPin.png)
 
 When selected (default value is `true`), the web part will pin itself underneath the main navigation bar on the page. Note that when you have web parts below the table of contents web parts, these web parts will scroll underneath the table of contents web part.
 
 ### Expand/Collapse header
 
+![Settings - Content Areas](./docs/TOCSetHeader.png)
+
 When using a web part title, this option will allow the end user to collapse or expand the header and thus the entire table of contents. Especially usefull when using the Table of Contents web part in the main section. The default value is `false`.
 
-### By default, collapse header
-
-This option is only allowed when the option `Expand/Collapse header` is `true`, otherwise this option will be disabled and disregarded.
+When using a collapsible header, this option allows you to collapse the header by default. This option is only allowed when the option `Expand/Collapse header` is `true`, otherwise this option will be disabled and disregarded.
 
 ## Things to know
 
